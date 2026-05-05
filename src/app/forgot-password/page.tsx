@@ -195,7 +195,7 @@ export default function ForgotPassword() {
               {step === 'code' && 'Enter the 6-digit code sent to your email'}
               {step === 'password' && 'Enter your new password'}
             </p>
-            <Stepper />
+            <Stepper currentStep={step}/>
           </div>
 
           {/* API Error */}

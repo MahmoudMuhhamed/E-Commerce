@@ -119,7 +119,7 @@ export default function Hero() {
 
         {/* Custom Carousel Dots — centered bottom */}
 
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2  flex items-center gap-1.5">
           {slides.map((_, index) => (
             <button
               key={index}

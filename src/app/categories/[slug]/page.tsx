@@ -7,6 +7,7 @@ import {
   fetchProductsByCategoryId,
   fetchSubCategoriesByCategory,
 } from '@/lib/ecommerceApi';
+import { Product } from '@/lib/products';
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -26,7 +27,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
 
   let category = null;
-  let products = [];
+  let products: Product[] = [];
   let subCategories = [];
   let hasError = false;
 
@@ -47,7 +48,7 @@ export default async function CategoryPage({ params }: PageProps) {
       return [[], []];
     });
 
-    products = productsData || [];
+    products = (productsData as Product[]) || [];
     subCategories = subCategoriesData || [];
   } catch (error) {
     console.error('Category page error:', error);
@@ -168,10 +169,10 @@ export default async function CategoryPage({ params }: PageProps) {
             </p>
             {/* Product Grid: 5 columns on desktop, responsive on mobile */}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
-              {products.map((product) => (
+              {products.map((product: Product) => (
                 <Card
                   key={String(product.id ?? product._id)}
-                  product={product}
+                  product={product as any}
                   layout="grid"
                 />
               ))}

@@ -168,8 +168,8 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className=" bg-white px-4 py-2 border-b border-gray-200">
-        <div className="max-w-8xl flex flex-col gap-3 sticky! top-0!">
+      <div className=" bg-white px-4 py-2 z-1000! sticky! top-0! border-b border-gray-200">
+        <div className="max-w-8xl flex flex-col gap-3 ">
           {/* Main toolbar */}
           <div className="flex items-center gap-2 lg:gap-4">
             <Link href="/" className="flex items-center gap-2 shrink-0">
@@ -214,7 +214,7 @@ export default function Navbar() {
                   />
                 </button>
                 {categoriesOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-52 bg-white border border-gray-100 rounded-xl shadow-lg py-2 z-50">
+                  <div className="absolute top-full left-0 mt-1 w-52 bg-white border border-gray-100 rounded-xl shadow-lg py-2 z-100">
                     {categories.map((cat) => (
                       <Link
                         key={cat.name}
@@ -371,10 +371,10 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setDrawerOpen(true)}
-                className="lg:hidden flex items-center justify-center h-10 w-10 rounded-lg bg-green-600 text-white hover:bg-green-700 shadow-sm"
+                className="lg:hidden flex items-center justify-center h-10 w-10 rounded-full bg-green-600 text-white hover:bg-green-700 shadow-sm"
                 aria-label="Open menu"
               >
-                <FaBars className="w-5 h-5" />
+                <FaBars className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -388,7 +388,7 @@ export default function Navbar() {
 
       {/* Slide-in drawer */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-[60] lg:hidden">
+        <div className="fixed inset-0 z-60 lg:hidden">
           <button
             type="button"
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"

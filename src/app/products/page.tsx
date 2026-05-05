@@ -23,7 +23,6 @@ export default function products() {
               <span>/</span>
               <span className="text-white font-medium">All Products</span>
             </div>
-     
             {/* Title Row */}
             <div className="flex items-center gap-4">
               <div className="w-17 h-17 bg-white/20 rounded-2xl flex items-center justify-center shrink-0 shadow-lg">
