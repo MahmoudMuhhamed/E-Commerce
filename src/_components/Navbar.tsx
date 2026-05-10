@@ -168,7 +168,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className=" bg-white px-4 py-2 z-1000! sticky! top-0! border-b border-gray-200">
+      <div className=" bg-white px-4 py-2 sticky! top-0! border-b border-gray-200">
         <div className="max-w-8xl flex flex-col gap-3 ">
           {/* Main toolbar */}
           <div className="flex items-center gap-2 lg:gap-4">

@@ -29,7 +29,7 @@ export default function WishlistButton({
     lg: 'w-6 h-6',
   };
 
-  const handleClick = async (e: React.MouseEvent) => {
+    const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 

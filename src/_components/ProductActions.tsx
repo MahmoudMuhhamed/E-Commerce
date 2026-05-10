@@ -9,6 +9,7 @@ import { FaMinus } from "react-icons/fa6";
 import { FaBolt } from "react-icons/fa6";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 import { useWishlist } from '@/context/WishlistContext';
+import WishlistButton from './WishlistButton';
 
 
 function normalizeProductId(product: Product): string {

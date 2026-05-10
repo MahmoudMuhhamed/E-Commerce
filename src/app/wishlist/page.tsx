@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useWishlist } from '@/context/WishlistContext';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
@@ -11,9 +12,15 @@ import { useToast } from '@/context/ToastContext';
 export default function WishlistPage() {
   const { items, isLoading, removeFromWishlist, error } = useWishlist();
   const { addToCart } = useCart();
-  const { user } = useAuth();
+  const { user, isInitializing } = useAuth();
   const { addToast } = useToast();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!isInitializing && !user) {
+      router.push('/signin');
+    }
+  }, [isInitializing, user, router]);
 
   const handleRemoveFromWishlist = async (productId: string) => {
     try {
@@ -29,9 +36,7 @@ export default function WishlistPage() {
     addToast('Added to cart', 'success');
   };
 
-
-
-  if (isLoading) {
+  if (isInitializing || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
         <div className="text-center">
@@ -40,6 +45,10 @@ export default function WishlistPage() {
         </div>
       </div>
     );
+  }
+
+  if (!user && !isInitializing) {
+    return null;
   }
 
   if (error) {
@@ -67,8 +76,8 @@ export default function WishlistPage() {
                 <FaRegHeart className="svg-inline--fa fa-box-open text-xl h-15 w-15 text-gray-300"/>
               </div>
             </div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Your cart is empty</h1>
-            <p className="text-gray-500 font-medium text-sm mb-6">Looks like you haven't added anything to your cart yet. <br />Start exploring our products!</p>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Your wishlist is empty</h1>
+            <p className="text-gray-500 font-medium text-sm mb-6">Looks like you haven't added anything to your wishlist yet. <br />Start exploring our products!</p>
             <div className='flex flex-col items-center justify-cevter gap-3'>
             <Link
               href="/products"
@@ -76,12 +85,6 @@ export default function WishlistPage() {
             >
               Browse Products
               <FaArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/signin"
-              className="flex w-full justify-center border border-gray-200 gap-2 bg-white hover:bg-gray-50  font-semibold px-6 py-3 rounded-lg transition-colors"
-            >
-              Sign In
             </Link>
             </div>
           </div>
@@ -115,7 +118,7 @@ export default function WishlistPage() {
                 className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-all group"
               >
                 {/* Image Container */}
-                <Link href={`/products/${productId}`} className="relative block overflow-hidden bg-gray-100 h-48">
+                <Link href={`/products/${productId}`} className="relative block overflow-hidden bg-gray-100 h-62">
                   <img
                     src={productImage}
                     alt={productTitle}

@@ -15,6 +15,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   isLoading: boolean;
+  isInitializing: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   forgotPassword: (email: string) => Promise<void>;
@@ -46,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -71,7 +73,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${storedToken}`,
+                token: storedToken,
+                Authorization: `Bearer ${storedToken}`,
               },
             });
 
@@ -79,7 +82,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               try {
                 const profileResponse = await fetch('https://ecommerce.routemisr.com/api/v1/users/profile', {
                   headers: {
-                    'Authorization': `Bearer ${storedToken}`,
+                    token: storedToken,
+                    Authorization: `Bearer ${storedToken}`,
                   },
                 });
 
@@ -102,6 +106,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       } catch (error) {
         console.error('Auth check error:', error);
+      } finally {
+        setIsInitializing(false);
       }
     };
 
@@ -221,7 +227,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          token,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -259,6 +266,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       token,
       isLoading,
+      isInitializing,
       login,
       logout,
       forgotPassword,

@@ -1,5 +1,6 @@
 'use client';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import { Product } from '@/lib/products';
 
 interface WishlistContextType {
@@ -15,19 +16,12 @@ interface WishlistContextType {
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
+  const { token } = useAuth();
   const [items, setItems] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getToken = () => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('token');
-    }
-    return null;
-  };
-
   const fetchWishlist = async () => {
-    const token = getToken();
     if (!token) {
       setItems([]);
       return;
@@ -35,10 +29,12 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
 
     setIsLoading(true);
     setError(null);
+
     try {
       const response = await fetch('https://ecommerce.routemisr.com/api/v1/wishlist', {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          token,
         },
       });
 
@@ -59,19 +55,17 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   };
 
   const addToWishlist = async (productId: string) => {
-    const token = getToken();
     if (!token) {
-      setError('Please sign in to add to wishlist');
-      throw new Error('Not authenticated');
+      setError('Authentication required to update wishlist');
+      throw new Error('Authentication required to update wishlist');
     }
 
-    setError(null);
     try {
       const response = await fetch('https://ecommerce.routemisr.com/api/v1/wishlist', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          token,
         },
         body: JSON.stringify({ productId }),
       });
@@ -91,19 +85,20 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   };
 
   const removeFromWishlist = async (productId: string) => {
-    const token = getToken();
     if (!token) {
       throw new Error('Not authenticated');
     }
 
     setError(null);
+
     try {
       const response = await fetch(
         `https://ecommerce.routemisr.com/api/v1/wishlist/${productId}`,
         {
           method: 'DELETE',
           headers: {
-            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            token,
           },
         }
       );
@@ -127,11 +122,12 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    const token = getToken();
     if (token) {
       fetchWishlist();
+    } else {
+      setItems([]);
     }
-  }, []);
+  }, [token]);
 
   return (
     <WishlistContext.Provider
